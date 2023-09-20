@@ -1,0 +1,142 @@
+x=[1 2 3 4]
+y=[5 6 7]
+z=conv(x,y)
+c=max(length(x),length(y))
+l=z(1:c)
+for k=1:length(z)-c
+    l(k)=l(k)+z(k+c)
+end
+l
+stem(l)
+title('Jasjit Singh Ahluwalia 102115041')
+cconv(x,y,4)
+
+clc;
+clear all;
+x=[1 2 3 4];
+h=[5 6 7];
+n1=length(x);
+n2=length(h);
+N=n1+n2-1;
+X=[x,zeros(1,N-n1)]
+H=[h,zeros(1,N-length(h))]
+M=2*N;
+Y=zeros(1,M);
+    
+for n=1:N-1
+    Y(n:n+N-1)=Y(n:n+N-1)+X(n)*H;
+    H=circshift(H,[1,0]);
+end
+Y
+stem(Y)
+
+
+N = 64; 
+n = 0:N-1; 
+w = 2*pi/N; 
+
+rectwin = ones(1,N); 
+hammwin = 0.54 - 0.46*cos(w*n); 
+hannwin = 0.5 - 0.5*cos(w*n); 
+blackmauwin = 0.42 - 0.5*cos(w*n) + 0.08*cos(2*w*n);
+bartlettwin = 1 - 2*abs(n - (N-1)/2) / (N-1);
+
+figure(1)
+subplot(2,2,1)
+stem(n, rectwin)
+title('Rectangular Window')
+xlabel('n')
+ylabel('w(n)')
+subplot(2,2,2)
+stem(n, hammwin)
+title('Hamming Window')
+xlabel('n')
+ylabel('w(n)')
+subplot(2,2,3)
+stem(n, hannwin)
+title('Hann Window')
+xlabel('n')
+ylabel('w(n)')
+subplot(2,2,4)
+stem(n, blackmauwin)
+title('Blackman Window')
+xlabel('n')
+ylabel('w(n)')
+[H_rectwin, f_rectwin] = freqz(rectwin, 1, 1024);
+[H_hammwin, f_hammwin] = freqz(rectwin, 1, 1024);
+[H_hannwin, f_hannwin] = freqz(rectwin, 1, 1024);
+[H_blackmauwin, f_blackmauwin] = freqz(rectwin, 1, 1024);
+
+figure(2)
+subplot(2,2,1)
+plot(f_rectwin, log(abs(H_rectwin)))
+title('Rectangular Window')
+xlabel('Frequency (Hz)')
+ylabel('|H(f)| (dB)')
+subplot(2,2,2)
+plot(f_hammwin, log(abs(H_hammwin)))
+title('Hamming Window')
+xlabel('Frequency (Hz)')
+ylabel('|H(f)| (dB)')
+subplot(2,2,3)
+plot(f_hannwin, log(abs(H_hannwin)))
+title('Hann Window')
+xlabel('Frequency (Hz)')
+ylabel('|H(f)| (dB)')
+subplot(2,2,4)
+plot(f_blackmauwin, log(abs(H_blackmauwin)))
+title('Blackman Window')
+xlabel('Frequency (Hz)')
+ylabel('|H(f)| (dB)')
+
+% Add Bartlett Window
+
+[H_bartlettwin, f_bartlettwin] = freqz(bartlettwin, 1, 1024);
+
+figure(3)
+subplot(2,1,1)
+stem(n, bartlettwin)
+title('Bartlett Window')
+xlabel('n')
+ylabel('w(n)')
+
+subplot(2,1,2)
+plot(f_bartlettwin, log(abs(H_bartlettwin)))
+title('Bartlett Window Frequency Response')
+xlabel('Frequency (Hz)')
+ylabel('|H(f)| (dB)')
+
+
+x=[1 2 3 4]
+y=[5 4 3]
+p=length(x)
+k=length(y)
+z=max(p,k)
+x_pad=[x,zeros(1,z-p)]
+y_pad=[y,zeros(1,z-k)]
+X=fft(x_pad)
+Y=fft(y_pad)
+H=X.*Y;
+h=ifft(H)
+stem(h)
+title('Jasjit Singh Ahluwalia 102115041')
+
+cconv(x,y,4)
+
+x=[1 2 3];
+h=[1 2];
+M = length(x);
+N = length(h);
+linearConvolution = zeros(1, M + N - 1);
+ 
+for n = 1:M+N-1
+    kmin = max(1, n - N + 1);
+    kmax = min(n, M);
+    value = 0;
+    for k = kmin:kmax
+        value = value + x(k) * h(n - k + 1);
+    end
+    linearConvolution(n) = value;
+end
+linearConvolution
+y=conv(x,h)
